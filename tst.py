@@ -1,6 +1,7 @@
 from pathlib import Path
 from tkinter import *
 from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import askdirectory
 import os
 import shutil
 
@@ -47,7 +48,10 @@ class Application:
       caminhoChaveXML= "{}".format(caminhoChaveXML)
       caminhoChaveXML = caminhoChaveXML + extensaoXML
       caminhoChaveXML= "{}".format(caminhoChaveXML)
-      chaveXML = caminhoChaveXML.split("/")[4]
+      chaveXML = caminhoChaveXML.split("/")#[4] #VERIFICAR ESSA LINHA PARA AJUSTE
+      for i in chaveXML:
+         if len(i) == 52:
+            chaveXML = i
       os.rename(filename, caminhoChaveXML)
       self.copiar_xml(caminhoChaveXML, chaveXML)
       os.rename(caminhoChaveXML, filename)
@@ -56,8 +60,12 @@ class Application:
       
 
    def copiar_xml(self, caminhoChaveXML, chaveXML):
-      raizPC = (r"C:\Program Files (x86)\CompuFour\Clipp\Exe")
-      for root, dirs, files in os.walk(raizPC):
+      raizPC = (r"C:\Program Files (x86)\CompuFour\Clipp\Exe") #VERIFICAR ESSA LINHA PARA AJUSTE
+      dirUsado = askdirectory(
+         initialdir = raizPC, 
+         title = "Buscar instalação",
+         )
+      for root, dirs, files in os.walk(dirUsado):
          for dir in dirs:
                if dir == "Log":
                   path_log_copia = os.path.join(root, dir)
