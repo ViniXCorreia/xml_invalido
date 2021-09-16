@@ -48,7 +48,7 @@ class Application:
       caminhoChaveXML= "{}".format(caminhoChaveXML)
       caminhoChaveXML = caminhoChaveXML + extensaoXML
       caminhoChaveXML= "{}".format(caminhoChaveXML)
-      chaveXML = caminhoChaveXML.split("/")#[4] #VERIFICAR ESSA LINHA PARA AJUSTE
+      chaveXML = caminhoChaveXML.split("/")
       for i in chaveXML:
          if len(i) == 52:
             chaveXML = i
