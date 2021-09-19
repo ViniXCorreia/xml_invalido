@@ -1,3 +1,4 @@
+import pathlib
 from pathlib import Path
 from tkinter import *
 from tkinter.filedialog import askopenfilename
@@ -52,28 +53,33 @@ class Application:
       for i in chaveXML:
          if len(i) == 52:
             chaveXML = i
-      os.rename(filename, caminhoChaveXML)
-      self.copiar_xml(caminhoChaveXML, chaveXML)
-      os.rename(caminhoChaveXML, filename)
-      if valor_check.get() == 0:
-         self.checkButton["command"] = self.apaga_xml(filename)
+            os.rename(filename, caminhoChaveXML)
+            self.copiar_xml(caminhoChaveXML, chaveXML, filename)
+            os.rename(caminhoChaveXML, filename)
+         elif len(i) > 52:
+            self.vazio["text"] = "Nome do arquivo inválido! Verifique se o nome do arquivo possui apenas 44 números!"
+         elif len(i) < 52:
+            self.vazio["text"] = "Nome do arquivo inválido! Está faltando números na chave de acesso!"
       
 
-   def copiar_xml(self, caminhoChaveXML, chaveXML):
-      raizPC = (r"C:\Program Files (x86)\CompuFour\Clipp\Exe") #VERIFICAR ESSA LINHA PARA AJUSTE
-      dirUsado = askdirectory(
-         initialdir = raizPC, 
-         title = "Buscar instalação",
-         )
+   def copiar_xml(self, caminhoChaveXML, chaveXML, filename):
       for root, dirs, files in os.walk(dirUsado):
          for dir in dirs:
                if dir == "Log":
                   path_log_copia = os.path.join(root, dir)
                   shutil.copy(caminhoChaveXML, path_log_copia + "/" + chaveXML )
-               elif dir == "NFe":
+                  if valor_check.get() == 0:
+                     self.checkButton["command"] = self.apaga_xml(filename)
+                  self.vazio["text"] = "Arquivo XML ajustado com sucesso!"
+               elif dir == "NFe" or dir == "Nfe":
                   path_nfe_copia = os.path.join(root, dir)
                   shutil.copy(caminhoChaveXML, path_nfe_copia + "/" + chaveXML)
-      self.vazio["text"] = "Arquivo XML movido com sucesso!"
+                  if valor_check.get() == 0:
+                     self.checkButton["command"] = self.apaga_xml(filename)
+                  self.vazio["text"] = "Arquivo XML ajustado com sucesso!"
+               elif not dir in dirUsado:
+                  self.vazio["text"] = "Pasta Log não encontrada, entre em contato com o Suporte Técnico!"
+      
    
    def apaga_xml(self, filename):
       os.remove(filename)
@@ -91,8 +97,9 @@ posx = screen_width/2 - width_window/2
 posy = screen_height/2 - height_window/2
 root.geometry("%dx%d+%d+%d" %(width_window, height_window, posx, posy))
 root.resizable(width=False, height=False)
-root.iconbitmap("tstXML/Imagens/c4red.ico")
-img = PhotoImage(file="tstXML/Imagens/c4.png")
+dirUsado = os.getcwd()
+root.iconbitmap(os.path.join(dirUsado, "Imagens\c4red.ico"))
+img = PhotoImage(file= os.path.join(dirUsado, "Imagens\c4.png"))
 valor_check = IntVar()
 home = str(Path.home())
 Application(root)
