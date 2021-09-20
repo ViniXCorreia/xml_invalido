@@ -63,6 +63,7 @@ class Application:
          self.vazio["text"] = "Nome do arquivo inválido! Está faltando números na chave de acesso!"
 
    def copiar_xml(self, caminhoChaveXML, chaveXML):
+      verifica = False
       for root, dirs, files in os.walk(dirUsado):
          for dir in dirs:
                if dir == "Log":
@@ -72,8 +73,10 @@ class Application:
                   path_nfe_copia = os.path.join(root, dir)
                   shutil.copy(caminhoChaveXML, path_nfe_copia + "/" + chaveXML)
                   self.vazio["text"] = "Arquivo XML ajustado com sucesso!"
-               elif not dir in dirUsado:
-                  self.vazio["text"] = "Pasta Log não encontrada, entre em contato com o Suporte Técnico!"
+                  verifica = True
+                  break
+      if verifica == False:
+         self.vazio["text"] = "Pasta Log não encontrada, entre em contato com o Suporte Técnico!"
       
    
    def apaga_xml(self, filename):
