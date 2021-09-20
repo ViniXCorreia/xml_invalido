@@ -66,7 +66,7 @@ class Application:
       verifica = False
       for root, dirs, files in os.walk(dirUsado):
          for dir in dirs:
-               if dir == "Log":
+               if dir == "Log" or dir == "log":
                   path_log_copia = os.path.join(root, dir)
                   shutil.copy(caminhoChaveXML, path_log_copia + "/" + chaveXML )
                elif dir == "NFe" or dir == "Nfe":
