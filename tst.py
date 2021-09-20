@@ -50,32 +50,27 @@ class Application:
       caminhoChaveXML = caminhoChaveXML + extensaoXML
       caminhoChaveXML= "{}".format(caminhoChaveXML)
       chaveXML = caminhoChaveXML.split("/")
-      for i in chaveXML:
-         if len(i) == 52:
-            chaveXML = i
-            os.rename(filename, caminhoChaveXML)
-            self.copiar_xml(caminhoChaveXML, chaveXML, filename)
-            os.rename(caminhoChaveXML, filename)
-         elif len(i) > 52:
-            self.vazio["text"] = "Nome do arquivo inválido! Verifique se o nome do arquivo possui apenas 44 números!"
-         elif len(i) < 52:
-            self.vazio["text"] = "Nome do arquivo inválido! Está faltando números na chave de acesso!"
-      
+      if len(chaveXML[-1]) == 52:
+         chaveXML = chaveXML[-1]
+         os.rename(filename, caminhoChaveXML)
+         self.copiar_xml(caminhoChaveXML, chaveXML)
+         os.rename(caminhoChaveXML, filename)
+         if valor_check.get() == 0:
+            self.checkButton["command"] = self.apaga_xml(filename)
+      elif len(chaveXML[-1]) > 52:
+         self.vazio["text"] = "Nome do arquivo inválido! Verifique se o nome do arquivo possui apenas 44 números!"
+      elif len(chaveXML[-1]) > 8 and len(chaveXML[-1]) < 52:
+         self.vazio["text"] = "Nome do arquivo inválido! Está faltando números na chave de acesso!"
 
-   def copiar_xml(self, caminhoChaveXML, chaveXML, filename):
+   def copiar_xml(self, caminhoChaveXML, chaveXML):
       for root, dirs, files in os.walk(dirUsado):
          for dir in dirs:
                if dir == "Log":
                   path_log_copia = os.path.join(root, dir)
                   shutil.copy(caminhoChaveXML, path_log_copia + "/" + chaveXML )
-                  if valor_check.get() == 0:
-                     self.checkButton["command"] = self.apaga_xml(filename)
-                  self.vazio["text"] = "Arquivo XML ajustado com sucesso!"
                elif dir == "NFe" or dir == "Nfe":
                   path_nfe_copia = os.path.join(root, dir)
                   shutil.copy(caminhoChaveXML, path_nfe_copia + "/" + chaveXML)
-                  if valor_check.get() == 0:
-                     self.checkButton["command"] = self.apaga_xml(filename)
                   self.vazio["text"] = "Arquivo XML ajustado com sucesso!"
                elif not dir in dirUsado:
                   self.vazio["text"] = "Pasta Log não encontrada, entre em contato com o Suporte Técnico!"
