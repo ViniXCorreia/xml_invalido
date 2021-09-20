@@ -52,15 +52,23 @@ class Application:
       chaveXML = caminhoChaveXML.split("/")
       if len(chaveXML[-1]) == 52:
          chaveXML = chaveXML[-1]
-         os.rename(filename, caminhoChaveXML)
-         self.copiar_xml(caminhoChaveXML, chaveXML)
-         os.rename(caminhoChaveXML, filename)
-         if valor_check.get() == 0:
-            self.checkButton["command"] = self.apaga_xml(filename)
+         self.ajustaXML(filename, caminhoChaveXML, chaveXML)
       elif len(chaveXML[-1]) > 52:
-         self.vazio["text"] = "Nome do arquivo inválido! Verifique se o nome do arquivo possui apenas 44 números!"
+         spacePosition = chaveXML[-1].find(" ")
+         tracePosition = chaveXML[-1].find("-")
+         teste = chaveXML[-1][spacePosition:tracePosition]
+         chaveXML[-1] = chaveXML[-1].replace(teste, "")
+         chaveXML = chaveXML[-1]
+         self.ajustaXML(filename, caminhoChaveXML, chaveXML)
       elif len(chaveXML[-1]) > 8 and len(chaveXML[-1]) < 52:
          self.vazio["text"] = "Nome do arquivo inválido! Está faltando números na chave de acesso!"
+
+   def ajustaXML(self, filename, caminhoChaveXML, chaveXML):
+      os.rename(filename, caminhoChaveXML)
+      self.copiar_xml(caminhoChaveXML, chaveXML)
+      os.rename(caminhoChaveXML, filename)
+      if valor_check.get() == 0:
+         self.checkButton["command"] = self.apaga_xml(filename)
 
    def copiar_xml(self, caminhoChaveXML, chaveXML):
       verificaLog = False
