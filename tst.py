@@ -86,9 +86,14 @@ class Application:
                            shutil.copy(caminhoChaveXML, path_nfe_copia + "/" + chaveXML)
                            self.vazio["text"] = "Arquivo XML ajustado com sucesso!"
                            verificaNfe = True
-      if verificaLog is False:
-         self.vazio["text"] = "Pasta Log não encontrada, entre em contato com o Suporte Técnico!"
-      elif verificaNfe is False:
+      if not verificaLog:
+         newDir = os.path.join(dirUsado, "Log")
+         os.mkdir(newDir)
+         newDirNFe = os.path.join(newDir, "NFe")
+         os.mkdir(newDirNFe)
+         self.copiar_xml(caminhoChaveXML, chaveXML)
+         self.vazio["text"] = "Pasta Log e NFe criadas! Arquivo XML ajustado com sucesso"
+      elif not verificaNfe:
          self.vazio["text"] = "Pasta NFe não encontrada, entre em contato com o Suporte Técnico!"
       
    
