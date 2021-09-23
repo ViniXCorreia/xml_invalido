@@ -54,7 +54,7 @@ class Application:
       elif len(chaveXML[-1]) > 52:
          if chaveXML[-1].find(" ") == 44:
             spacePosition = chaveXML[-1].find(" ")
-            tracePosition = chaveXML[-1].find("-")
+            tracePosition = chaveXML[-1].find("-nfe")
             teste = chaveXML[-1][spacePosition:tracePosition]
             chaveXML[-1] = chaveXML[-1].replace(teste, "")
             chaveXML = chaveXML[-1]
@@ -76,17 +76,17 @@ class Application:
       verificaNfe = False
       for root, dirs, files in os.walk(dirUsado):
          for dir in dirs:
-               if dir == "Log" or dir == "log":
-                  path_log_copia = os.path.join(root, dir)
-                  shutil.copy(caminhoChaveXML, path_log_copia + "/" + chaveXML )
-                  verificaLog = True
-                  for raiz, pastas, arquivos in os.walk(path_log_copia):
-                     for pasta in pastas:
-                        if pasta == "NFe" or pasta == "Nfe":
-                           path_nfe_copia = os.path.join(raiz, pasta)
-                           shutil.copy(caminhoChaveXML, path_nfe_copia + "/" + chaveXML)
-                           self.vazio["text"] = "Arquivo XML ajustado com sucesso!"
-                           verificaNfe = True
+            if dir.lower() == "log":
+               path_log_copia = os.path.join(root, dir)
+               shutil.copy(caminhoChaveXML, path_log_copia + "/" + chaveXML )
+               verificaLog = True
+               for raiz, pastas, arquivos in os.walk(path_log_copia):
+                  for pasta in pastas:
+                     if pasta.lower() == "nfe":
+                        path_nfe_copia = os.path.join(raiz, pasta)
+                        shutil.copy(caminhoChaveXML, path_nfe_copia + "/" + chaveXML)
+                        self.vazio["text"] = "Arquivo XML ajustado com sucesso!"
+                        verificaNfe = True
       if not verificaLog:
          newDir = os.path.join(dirUsado, "Log")
          os.mkdir(newDir)
