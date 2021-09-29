@@ -1,5 +1,6 @@
 from pathlib import Path
 from tkinter import *
+from tkinter import messagebox
 from tkinter.filedialog import askopenfilename
 import os
 import shutil
@@ -60,9 +61,11 @@ class Application:
             chaveXML = chaveXML[-1]
             self.ajustaXML(filename, caminhoChaveXML, chaveXML)
          else:
-            self.vazio["text"] = "Nome do arquivo inválido! Verifique se existem apenas 44 números na chave de acesso!"
+            messagebox.showerror("Ajuste XML", "Nome do arquivo inválido! \nVerifique se existem apenas 44 números na chave de acesso!")
+            #self.vazio["text"] = "Nome do arquivo inválido! Verifique se existem apenas 44 números na chave de acesso!"
       elif len(chaveXML[-1]) > 8 and len(chaveXML[-1]) < 52:
-         self.vazio["text"] = "Nome do arquivo inválido! Está faltando números na chave de acesso!"
+         messagebox.showerror("Ajuste XML", "Nome do arquivo inválido! \nEstá faltando números na chave de acesso!")
+         #self.vazio["text"] = "Nome do arquivo inválido! Está faltando números na chave de acesso!"
 
    def ajustaXML(self, filename, caminhoChaveXML, chaveXML):
          os.rename(filename, caminhoChaveXML)
@@ -85,17 +88,20 @@ class Application:
                      if pasta.lower() == "nfe":
                         path_nfe_copia = os.path.join(raiz, pasta)
                         shutil.copy(caminhoChaveXML, path_nfe_copia + "/" + chaveXML)
-                        self.vazio["text"] = "Arquivo XML ajustado com sucesso!"
+                        messagebox.showinfo("Ajuste XML", "Arquivo XML ajustado com sucesso! \nConsulte novamente sua NFe!")
+                        #self.vazio["text"] = "Arquivo XML ajustado com sucesso!"
                         verificaNfe = True
       if not verificaLog:
          newDir = os.path.join(dirUsado, "Log")
          os.mkdir(newDir)
          newDirNFe = os.path.join(newDir, "NFe")
          os.mkdir(newDirNFe)
+         messagebox.showwarning("Ajuste XML", "Pastas Log e Nfe criadas!")
          self.copiar_xml(caminhoChaveXML, chaveXML)
-         self.vazio["text"] = "Pasta Log e NFe criadas! Arquivo XML ajustado com sucesso"
+         #self.vazio["text"] = "Pasta Log e NFe criadas! Arquivo XML ajustado com sucesso"
       elif not verificaNfe:
-         self.vazio["text"] = "Pasta NFe não encontrada, entre em contato com o Suporte Técnico!"
+         messagebox.showerror("Ajuste XML", "Pasta Nfe não encontrada! \nEntre em contato com o Suporte Técnico!")
+         #self.vazio["text"] = "Pasta NFe não encontrada, entre em contato com o Suporte Técnico!"
       
    
    def apaga_xml(self, filename):
