@@ -24,7 +24,7 @@ class Application:
       self.portalNfe["text"] = "Acessar Consulta NFe"
       self.portalNfe["font"] = ("Calibri", "12")
       self.portalNfe["bd"] = 0
-      self.portalNfe["fg"] = "Blue"
+      self.portalNfe["fg"] = "#2548E3"
       self.portalNfe["command"] = self.openSite
       self.portalNfe.grid(row = 1, column=3)
       self.checkButton = Checkbutton(self.widget1)
@@ -129,7 +129,7 @@ root.resizable(width=False, height=False)
 dirUsado = os.getcwd()
 root.iconbitmap(os.path.join(dirUsado, "Imagens\c4red.ico"))
 img = PhotoImage(file= os.path.join(dirUsado, "Imagens\c4.png"))
-valor_check = IntVar()
+valor_check = IntVar(value=1)
 home = str(Path.home())
 Application(root)
 root.mainloop()
