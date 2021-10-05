@@ -53,10 +53,10 @@ class Application:
          multiple = False)
       extensaoXML = ("-nfe.xml")
       caminhoChaveXML = os.path.splitext(filename)[0]
-      caminhoChaveXML= "{}".format(caminhoChaveXML)
       caminhoChaveXML = caminhoChaveXML + extensaoXML
-      caminhoChaveXML= "{}".format(caminhoChaveXML)
       chaveXML = caminhoChaveXML.split("/")
+      print(caminhoChaveXML)
+      print(chaveXML)
       if len(chaveXML[-1]) == 52:
          chaveXML = chaveXML[-1]
          self.ajustaXML(filename, caminhoChaveXML, chaveXML)  
@@ -72,6 +72,8 @@ class Application:
             messagebox.showerror("Ajuste XML", "Nome do arquivo inválido! \nVerifique se existem apenas 44 números na chave de acesso!")
       elif len(chaveXML[-1]) > 8 and len(chaveXML[-1]) < 52:
          messagebox.showerror("Ajuste XML", "Nome do arquivo inválido! \nEstá faltando números na chave de acesso!")
+      else:
+         messagebox.showerror("Ajusta XML", "Ocorreu um erro, entre em contato com o Suporte Técnico!")
 
    def ajustaXML(self, filename, caminhoChaveXML, chaveXML):
          os.rename(filename, caminhoChaveXML)
