@@ -42,21 +42,22 @@ class Application:
       self.cancela["width"] = 25
       self.cancela["height"] = 2
       self.cancela["command"] = self.finalizaArquivo
-      self.cancela.grid(row = 6, column=3, sticky= N)
+      self.cancela.grid(row = 6, column=3, sticky= N)    
  
    def buscarArquivo(self):
       Tk().withdraw()
-      filename = askopenfilename(
-         filetypes=[("Arquivos XML", ".xml")],
-         initialdir= (home + "\Downloads"),
-         title="Buscar XML",
-         multiple = False)
-      extensaoXML = ("-nfe.xml")
-      caminhoChaveXML = os.path.splitext(filename)[0]
-      caminhoChaveXML = caminhoChaveXML + extensaoXML
-      chaveXML = caminhoChaveXML.split("/")
-      print(caminhoChaveXML)
-      print(chaveXML)
+      try:
+         filename = askopenfilename(
+            filetypes=[("Arquivos XML", ".xml")],
+            initialdir= (home + "\Downloads"),
+            title="Buscar XML",
+            multiple = False)
+         extensaoXML = ("-nfe.xml")
+         caminhoChaveXML = os.path.splitext(filename)[0]
+         caminhoChaveXML = caminhoChaveXML + extensaoXML
+         chaveXML = caminhoChaveXML.split("/")
+      except:
+         messagebox.showerror("Ajuste XML", "Erro ao selecionar o arquivo! Tente novamente!")
       if len(chaveXML[-1]) == 52:
          chaveXML = chaveXML[-1]
          self.ajustaXML(filename, caminhoChaveXML, chaveXML)  
@@ -70,47 +71,60 @@ class Application:
             self.ajustaXML(filename, caminhoChaveXML, chaveXML)
          else:
             messagebox.showerror("Ajuste XML", "Nome do arquivo inválido! \nVerifique se existem apenas 44 números na chave de acesso!")
-      elif len(chaveXML[-1]) > 8 and len(chaveXML[-1]) < 52:
+      elif len(chaveXML[-1]) < 52 and len(chaveXML[-1]) > 8:
          messagebox.showerror("Ajuste XML", "Nome do arquivo inválido! \nEstá faltando números na chave de acesso!")
-      else:
-         messagebox.showerror("Ajusta XML", "Ocorreu um erro, entre em contato com o Suporte Técnico!")
 
    def ajustaXML(self, filename, caminhoChaveXML, chaveXML):
-         os.rename(filename, caminhoChaveXML)
-         self.copiar_xml(caminhoChaveXML, chaveXML)
-         os.rename(caminhoChaveXML, filename)
+         try:
+            os.rename(filename, caminhoChaveXML)
+            self.copiar_xml(caminhoChaveXML, chaveXML)
+            os.rename(caminhoChaveXML, filename)
+         except:
+            messagebox.showerror("Ajuste XML", "Erro ao renomear arquivo! Tente novamente!")
          if valor_check.get() == 0:
             self.checkButton["command"] = self.apaga_xml(filename)
-
+            
    def copiar_xml(self, caminhoChaveXML, chaveXML):
       verificaLog = False
       verificaNfe = False
       for root, dirs, files in os.walk(dirUsado):
          for dir in dirs:
             if dir.lower() == "log":
-               path_log_copia = os.path.join(root, dir)
-               shutil.copy(caminhoChaveXML, path_log_copia + "/" + chaveXML )
-               verificaLog = True
+               try:
+                  path_log_copia = os.path.join(root, dir)
+                  shutil.copy(caminhoChaveXML, path_log_copia + "/" + chaveXML )
+                  verificaLog = True
+               except:
+                  messagebox.showerror("Ajuste XML", "Erro ao copiar o arquivo na pasta Log! Tente Novamente!")
                for raiz, pastas, arquivos in os.walk(path_log_copia):
                   for pasta in pastas:
                      if pasta.lower() == "nfe":
-                        path_nfe_copia = os.path.join(raiz, pasta)
-                        shutil.copy(caminhoChaveXML, path_nfe_copia + "/" + chaveXML)
-                        messagebox.showinfo("Ajuste XML", "Arquivo XML ajustado com sucesso! \nConsulte novamente sua NFe!")
-                        verificaNfe = True
+                        try:
+                           path_nfe_copia = os.path.join(raiz, pasta)
+                           shutil.copy(caminhoChaveXML, path_nfe_copia + "/" + chaveXML)
+                           messagebox.showinfo("Ajuste XML", "Arquivo XML ajustado com sucesso! \nConsulte novamente sua NFe!")
+                           verificaNfe = True
+                        except:
+                           messagebox.showerror("Ajuste XML", "Erro ao copiar o arquivo na pasta NFe! Tente novamente!")
       if not verificaLog:
-         newDir = os.path.join(dirUsado, "Log")
-         os.mkdir(newDir)
-         newDirNFe = os.path.join(newDir, "NFe")
-         os.mkdir(newDirNFe)
-         messagebox.showwarning("Ajuste XML", "Pastas Log e Nfe criadas!")
+         try:
+            newDir = os.path.join(dirUsado, "Log")
+            os.mkdir(newDir)
+            newDirNFe = os.path.join(newDir, "NFe")
+            os.mkdir(newDirNFe)
+            messagebox.showwarning("Ajuste XML", "Pastas Log e Nfe criadas!")
+         except:
+            messagebox.showerror("Ajuste XML", "Erro ao criar as pastas Log e/ou NFCe!")
          self.copiar_xml(caminhoChaveXML, chaveXML)
       elif not verificaNfe:
          messagebox.showerror("Ajuste XML", "Pasta Nfe não encontrada! \nEntre em contato com o Suporte Técnico!")
       
    
    def apaga_xml(self, filename):
-      os.remove(filename)
+      try: 
+         os.remove(filename)
+      except:
+         messagebox.showerror("Ajuste XML", "Erro ao remover o arquivo da pasta original!")
    
    def openSite(self):
       webbrowser.open("https://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?tipoConsulta=resumo&tipoConteudo=d09fwabTnLk=")
